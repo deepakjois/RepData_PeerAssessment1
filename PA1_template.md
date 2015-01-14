@@ -1,16 +1,12 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
 #### Loading
 
-```{r}
+
+```r
 if (!file.exists("activity.csv")) {
     unzip("activity.zip")
 }
@@ -18,7 +14,8 @@ data <- read.csv("activity.csv")
 ```
 
 #### Preprocessing
-```{r}
+
+```r
 data$date <- as.Date(data$date, format="%Y-%m-%d")
 bydate <- aggregate(steps ~ date, data = data, sum)
 ```
@@ -27,43 +24,64 @@ bydate <- aggregate(steps ~ date, data = data, sum)
 
 #### Histogram
 
-```{r, echo=FALSE}
-plot(steps ~ date, data = bydate, type = "h")
-```
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 #### Mean
 
-```{r}
+
+```r
 mean(bydate$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 #### Median
 
-```{r}
+
+```r
 median(bydate$steps)
+```
+
+```
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
 
 **1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)**
 
-```{r}
+
+```r
 byinterval <- aggregate(steps ~ interval, data = data, mean)
 plot(steps ~ interval, data = byinterval, type = "l")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
 **2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?**
 
-```{r}
+
+```r
 byinterval[byinterval$steps == max(byinterval$steps), "interval"]
+```
+
+```
+## [1] 835
 ```
 ## Imputing missing values
 
 **1. Calculate and report the total number of missing values in the dataset
 (i.e. the total number of rows with NAs)**
 
-```{r}
+
+```r
 sum(is.na(data$steps))
+```
+
+```
+## [1] 2304
 ```
 
 **2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.**
@@ -72,7 +90,8 @@ We will use the mean for the 5-minute interval to fill out the missing values.
 
 **3. Create a new dataset that is equal to the original dataset but with the missing data filled in.**
 
-```{r}
+
+```r
 datai <- data.frame(data)
 for(i in 1:nrow(datai)){
    if (is.na(datai$steps[i])){
@@ -87,20 +106,28 @@ bydatei <- aggregate(steps ~ date, data = datai, sum)
 
 #### Histogram
 
-```{r, echo=FALSE}
-plot(steps ~ date, data = bydatei, type = "h")
-```
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 #### Mean
 
-```{r}
+
+```r
 mean(bydatei$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 #### Median
 
-```{r}
+
+```r
 median(bydatei$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 There doesn’t seem to be a lot of impact of imputing missing data on the estimates of the total daily number of steps. This is evident by looking at the mean and median of the imputed data, which is nearly the same as the mean and median of the original data.
@@ -110,14 +137,16 @@ There doesn’t seem to be a lot of impact of imputing missing data on the estim
 
 **1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.**
 
-```{r}
+
+```r
 datai$weekdaytype = factor(weekdays(as.Date(datai$date)) %in% c("Saturday", "Sunday"), levels = c("FALSE", "TRUE"), labels = c("weekday", "weekend"))
 ```
 
 **2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).**
 
 
-```{r}
+
+```r
 par(mfrow = c(2, 1))
 
 byintervalwe <- aggregate(steps ~ interval, data = datai, subset = datai$weekdaytype == "weekend", FUN = mean)
@@ -125,7 +154,8 @@ plot(byintervalwe, type = "l", main = "weekend", ylim = c(0, 250))
 
 byintervalwd <- aggregate(steps ~ interval, data = datai, subset = datai$weekdaytype == "weekday", FUN = mean)
 plot(byintervalwd, type = "l", main = "weekday", ylim = c(0, 250))
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
 
 From the data, it looks like people walk more on weekdays during the time intervals **500** and **1000**, as seen by the increase in the average number of steps during that time period during weekdays.
