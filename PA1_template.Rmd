@@ -27,7 +27,7 @@ bydate <- aggregate(steps ~ date, data = data, sum)
 
 #### Histogram
 
-```{r, echo=FALSE}
+```{r}
 plot(steps ~ date, data = bydate, type = "h")
 ```
 
@@ -87,7 +87,7 @@ bydatei <- aggregate(steps ~ date, data = datai, sum)
 
 #### Histogram
 
-```{r, echo=FALSE}
+```{r}
 plot(steps ~ date, data = bydatei, type = "h")
 ```
 

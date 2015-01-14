@@ -24,6 +24,11 @@ bydate <- aggregate(steps ~ date, data = data, sum)
 
 #### Histogram
 
+
+```r
+plot(steps ~ date, data = bydate, type = "h")
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 #### Mean
@@ -105,6 +110,11 @@ bydatei <- aggregate(steps ~ date, data = datai, sum)
 
 
 #### Histogram
+
+
+```r
+plot(steps ~ date, data = bydatei, type = "h")
+```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
