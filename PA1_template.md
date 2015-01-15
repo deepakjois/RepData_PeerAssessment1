@@ -157,13 +157,9 @@ datai$weekdaytype = factor(weekdays(as.Date(datai$date)) %in% c("Saturday", "Sun
 
 
 ```r
-par(mfrow = c(2, 1))
-
-byintervalwe <- aggregate(steps ~ interval, data = datai, subset = datai$weekdaytype == "weekend", FUN = mean)
-plot(byintervalwe, type = "l", main = "weekend", ylim = c(0, 250))
-
-byintervalwd <- aggregate(steps ~ interval, data = datai, subset = datai$weekdaytype == "weekday", FUN = mean)
-plot(byintervalwd, type = "l", main = "weekday", ylim = c(0, 250))
+byIntervalAndWeekdayType <- aggregate(steps ~ interval + weekdaytype, data = datai, mean)
+library(ggplot2)
+qplot(interval, steps, data = byIntervalAndWeekdayType, geom = "line", facets = weekdaytype ~ .)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
